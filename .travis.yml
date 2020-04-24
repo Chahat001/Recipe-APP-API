@@ -1,0 +1,12 @@
+language: python
+python:
+  - "3.6"
+
+
+services:
+  - docker
+
+berfore_script: pip install docker-compose
+
+script:
+  -dcoker-compose run app sh -c "python manage.py test && flake8"
