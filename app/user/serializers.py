@@ -22,6 +22,22 @@ class UserSerializer(serializers.ModelSerializer):
         print(validated_data)
         return get_user_model().objects.create_user(**validated_data)
 
+    def update(self, instance, validated_data):
+        """ update the user, setting the password correctly and return it"""
+        """ instance : model instance that is linked to out model serailizer in our case our user model"""
+        """ validated data is the incoming validated data """
+
+        password = validated_data.pop('password', None)
+        user = super().update(instance, validated_data)
+
+        if password:
+            user.set_password(password)
+            """ write user back to database with edited password"""
+            user.save()
+
+        return user
+
+
 class AuthTokenSerializer(serializers.Serializer):
     """ Serializer for the user authnication object """
     email = serializers.CharField()
